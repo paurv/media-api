@@ -1,29 +1,32 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Post,
-  UsePipes,
-  ValidationPipe,
-} from '@nestjs/common';
+import { Body, Controller, Post, Patch, Param } from '@nestjs/common';
+import { CreateUserDto } from './dtos/create-user.dto';
+import { AuthService } from './auth.service';
+import { LoginDto } from './dtos/login.dto';
+import { Serialize } from 'src/interceptors/serialize.interceptors';
+import { UserDto } from './dtos/user.dto';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dtos/CreateUser.dto';
-// import { AuthService } from './auth.service';
+import { UpdaateUserDto } from './dtos/update-user.dto';
 
-@Controller('users')
+@Controller('auth')
+@Serialize(UserDto)
 export class UsersController {
   constructor(
-    private userService: UsersService, // private authService: AuthService,
+    private userService: UsersService,
+    private authService: AuthService,
   ) {}
 
-  @Get()
-  getUsers() {
-    return this.userService.getUsers();
+  @Post('register')
+  createUser(@Body() body: CreateUserDto) {
+    return this.authService.create(body);
   }
 
-  @Post('create')
-  @UsePipes(ValidationPipe)
-  createUsers(@Body() body: CreateUserDto) {
-    return this.userService.create(body);
+  @Post('login')
+  loginUser(@Body() body: LoginDto) {
+    return this.authService.login(body);
+  }
+
+  @Patch('role/:id')
+  updateRole(@Body() body: UpdaateUserDto, @Param('id') id: string) {
+    return this.userService.updateRole(id, body.role);
   }
 }

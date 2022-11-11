@@ -9,6 +9,11 @@ export class User {
   @Column()
   email: string;
 
+  @Column({
+    default: 'BASIC_ACCESS',
+  })
+  role: 'FULL_ACCESS' | 'BASIC_ACCESS' | 'VIDEO_ACCESS' | 'COMMENT_ACCESS';
+
   @Column()
   password: string;
 }
