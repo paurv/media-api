@@ -9,7 +9,7 @@ async function bootstrap() {
     .setTitle('Media Storage')
     .setDescription('Media Storage API')
     .setVersion('v1')
-    .addTag('media')
+    // .addTag('media')
     .addBearerAuth({ name: 'Token', type: 'http' })
     .build();
 

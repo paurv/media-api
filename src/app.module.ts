@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { User } from './users/entity/users.entity';
 import { UsersModule } from './users/users.module';
 import { ImagesModule } from './images/images.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { ImagesModule } from './images/images.module';
     }),
     UsersModule,
     ImagesModule,
+    CloudinaryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
