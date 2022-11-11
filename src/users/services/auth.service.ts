@@ -5,13 +5,13 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Repository } from 'typeorm';
-import { CreateUserDto } from './dtos/create-user.dto';
-import { User } from './users.entity';
 import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
-import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { InjectRepository } from '@nestjs/typeorm';
-import { LoginDto } from './dtos/login.dto';
+import { LoginDto } from '../dtos/login.dto';
+import { CreateUserDto } from '../dtos/create-user.dto';
+import { User } from '../entity/users.entity';
+import { JwtPayload } from '../interfaces/jwt-payload.interface';
 
 const scrypt = promisify(_scrypt);
 

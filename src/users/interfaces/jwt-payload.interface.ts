@@ -1,4 +1,4 @@
-import { User } from '../users.entity';
+import { User } from '../entity/users.entity';
 
 export interface JwtPayload extends Partial<User> {
   id: string;

@@ -1,11 +1,11 @@
 import { Body, Controller, Post, Patch, Param } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
-import { AuthService } from './auth.service';
 import { LoginDto } from './dtos/login.dto';
 import { Serialize } from 'src/interceptors/serialize.interceptors';
 import { UserDto } from './dtos/user.dto';
-import { UsersService } from './users.service';
 import { UpdaateUserDto } from './dtos/update-user.dto';
+import { UsersService } from './services/users.service';
+import { AuthService } from './services/auth.service';
 
 @Controller('auth')
 @Serialize(UserDto)
