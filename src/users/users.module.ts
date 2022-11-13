@@ -7,11 +7,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import { UsersService } from './services/users.service';
 import { AuthService } from './services/auth.service';
+import { JwtStrategy } from './strategy/jwt.strategy';
 
 @Module({
-  controllers: [UsersController],
-  providers: [UsersService, AuthService],
   imports: [
+    PassportModule,
     TypeOrmModule.forFeature([User]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
@@ -27,6 +27,8 @@ import { AuthService } from './services/auth.service';
       },
     }),
   ],
-  exports: [TypeOrmModule, JwtModule, PassportModule, JwtModule],
+  providers: [UsersService, AuthService, JwtStrategy],
+  controllers: [UsersController],
+  exports: [TypeOrmModule, PassportModule, JwtModule, JwtStrategy],
 })
 export class UsersModule {}

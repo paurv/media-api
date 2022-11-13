@@ -6,12 +6,14 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Repository } from 'typeorm';
 import { User } from '../entity/users.entity';
 import { JwtPayload } from '../interfaces/jwt-payload.interface';
+import { AuthService } from '../services/auth.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+
     configService: ConfigService,
   ) {
     super({
@@ -21,15 +23,26 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: JwtPayload): Promise<User> {
-    const { id } = payload;
+    console.log('payload: ', payload);
+
+    const { id, role } = payload;
 
     const user = await this.userRepository.findOneBy({ id });
 
     if (!user) throw new UnauthorizedException('Token not valid');
 
-    // if (!user.isActive)
-    //   throw new UnauthorizedException('User is inactive, talk with an admin');
-
     return user;
   }
+
+  // constructor(private authService: AuthService) {
+  //   super();
+  // }
+
+  // async validate(username: string, password: string): Promise<any> {
+  //   const user = await this.authService.validateUser(username, password);
+  //   if (!user) {
+  //     throw new UnauthorizedException();
+  //   }
+  //   return user;
+  // }
 }

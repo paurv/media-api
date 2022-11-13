@@ -43,8 +43,10 @@ export class AuthService {
     const { email, password } = loginDto;
     const user = await this.repo.findOne({
       where: { email },
-      select: { email: true, password: true, id: true },
+      select: { email: true, password: true, id: true, role: true },
     });
+
+    console.log(user);
 
     if (!user) throw new UnauthorizedException('Credentials are not valid');
 
@@ -54,15 +56,17 @@ export class AuthService {
       throw new BadRequestException('Credentials are not valid');
     }
 
+    console.log('user role: ', user.role);
+
     return {
       ...user,
-      token: this.getJwtToken({ id: user.id }),
+      token: this.getJwtToken({ id: user.id, role: user.role }),
     };
   }
 
   private getJwtToken(payload: JwtPayload) {
     const token = this.jwtService.sign(payload);
-    console.log('token: ', token);
+    // console.log('token: ', token);
 
     return token;
   }
