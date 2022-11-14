@@ -1,6 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Image } from 'src/cloudinary/entity/image.entity';
 import { VALID_ROLES } from '../interfaces/role.interface';
+import { Video } from 'src/cloudinary/entity/video.entity';
 
 @Entity()
 export class User {
@@ -22,4 +23,7 @@ export class User {
 
   @OneToMany(() => Image, (image) => image.user)
   images: Image[];
+
+  @OneToMany(() => Video, (video) => video.user)
+  video: Video[];
 }

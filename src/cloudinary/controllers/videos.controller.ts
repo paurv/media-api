@@ -1,38 +1,33 @@
 import {
-  Body,
   Controller,
-  Get,
   Post,
-  Query,
   UploadedFile,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
-import { fileMimetypeFilter } from './filters/file-mimetypes.filter';
-import { ImagesService } from './services/images.service';
-import { UploadImageDto } from '../dtos/upload-image.dto';
+import { fileMimetypeFilter } from '../filters/file-mimetypes.filter';
 import { AuthUser } from 'src/decorators/auth.decorator';
 import { AuthGuard } from '@nestjs/passport';
-import { RoleProtected } from './decorators/role-protected.decorator';
+import { RoleProtected } from '../decorators/role-protected.decorator';
 import { VALID_ROLES } from 'src/users/interfaces/role.interface';
 import { UserRoleGuard } from 'src/Guards/user-role.guard';
 import { User } from 'src/users/entity/users.entity';
-import { PaginationDto } from 'src/dtos/pagination.dto';
+import { VideosService } from '../services/videos.service';
 
-@Controller('images')
+@Controller('videos')
 @ApiBearerAuth()
-@ApiTags('Images')
-export class ImagesController {
-  constructor(private imagesService: ImagesService) {}
+@ApiTags('Videos')
+export class VideosController {
+  constructor(private videoService: VideosService) {}
 
   @Post()
   @RoleProtected(VALID_ROLES.FULL_ACCESS, VALID_ROLES.COMMENT_ACCESS)
   @UseGuards(AuthGuard(), UserRoleGuard)
   @UseInterceptors(
     FileInterceptor('file', {
-      fileFilter: fileMimetypeFilter('image'),
+      fileFilter: fileMimetypeFilter('video'),
       limits: { files: 1 },
     }),
   )
@@ -52,24 +47,9 @@ export class ImagesController {
     },
   })
   async uploadImage(
-    @Body() body: UploadImageDto,
-    @UploadedFile() image: Express.Multer.File,
+    @UploadedFile() video: Express.Multer.File,
     @AuthUser('id') userId: User,
   ) {
-    return this.imagesService.uploadImageToCloudinary(
-      image,
-      userId,
-      body.comment,
-    );
-  }
-
-  @Get()
-  @UseGuards(AuthGuard(), UserRoleGuard)
-  getAllImages(
-    @AuthUser('id') userId: string,
-    @Query() paginationDto: PaginationDto,
-  ) {
-    console.log('paginationDto: ', paginationDto);
-    return this.imagesService.getAllImages(userId, paginationDto);
+    return this.videoService.uploadVideoToCloudinary(video, userId);
   }
 }

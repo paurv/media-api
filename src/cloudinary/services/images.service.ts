@@ -44,7 +44,7 @@ export class ImagesService {
   }
 
   async getAllImages(userId: string, paginationDto: PaginationDto) {
-    const { limit = 10, from = 0 } = paginationDto;
+    const { limit = 10, offset = 0 } = paginationDto;
 
     const filter = { id: userId } as Partial<User>;
 
@@ -54,7 +54,7 @@ export class ImagesService {
         createdAt: 'ASC',
       },
       take: limit,
-      skip: from,
+      skip: offset,
     });
 
     return images;
