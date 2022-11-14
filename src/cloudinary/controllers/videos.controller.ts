@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
-import { fileMimetypeFilter } from '../filters/file-mimetypes.filter';
+// import { fileMimetypeFilter } from '../filters/file-mimetypes.filter';
 import { AuthUser } from 'src/decorators/auth.decorator';
 import { AuthGuard } from '@nestjs/passport';
 import { RoleProtected } from '../decorators/role-protected.decorator';
@@ -27,7 +27,7 @@ export class VideosController {
   @UseGuards(AuthGuard(), UserRoleGuard)
   @UseInterceptors(
     FileInterceptor('file', {
-      fileFilter: fileMimetypeFilter('video'),
+      // fileFilter: fileMimetypeFilter('video'),
       limits: { files: 1 },
     }),
   )

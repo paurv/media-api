@@ -15,10 +15,10 @@ export class VideosService {
 
   async uploadVideoToCloudinary(file: Express.Multer.File, user: User) {
     // const storedData = await this.cloudinary.uploadImage(file).catch(() => {
-    return await this.cloudinary.uploadImage(file).catch(() => {
+    const storedData = await this.cloudinary.uploadImage(file).catch(() => {
       throw new BadRequestException('Invalid file type.');
     });
-    // return this.storeVideo(storedData, user);
+    return this.storeVideo(storedData, user);
   }
 
   private storeVideo(
