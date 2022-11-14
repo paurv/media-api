@@ -1,5 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Image } from 'src/cloudinary/entity/image.entity';
+import { VALID_ROLES } from '../interfaces/role.interface';
 
 @Entity()
 export class User {
@@ -10,9 +11,11 @@ export class User {
   email: string;
 
   @Column({
-    default: 'BASIC_ACCESS',
+    type: 'enum',
+    enum: VALID_ROLES,
+    default: VALID_ROLES.BASIC_ACCESS,
   })
-  role: 'FULL_ACCESS' | 'BASIC_ACCESS' | 'VIDEO_ACCESS' | 'COMMENT_ACCESS';
+  role: VALID_ROLES;
 
   @Column()
   password: string;

@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEmail,
+  IsEnum,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -8,6 +9,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
+import { VALID_ROLES } from '../interfaces/role.interface';
 
 export class CreateUserDto {
   @ApiProperty({ type: String, description: 'User email' })
@@ -32,6 +34,9 @@ export class CreateUserDto {
     default: 'BASIC_ACCESS',
   })
   @IsOptional()
-  @Matches(/^(FULL_ACCESS|BASIC_ACCESS|VIDEO_ACCESS|COMMENT_ACCESS)$/)
-  role: 'FULL_ACCESS' | 'BASIC_ACCESS' | 'VIDEO_ACCESS' | 'COMMENT_ACCESS';
+  @IsEnum(VALID_ROLES, {
+    message:
+      'Valid roles: ( FULL_ACCESS | BASIC_ACCESS | VIDEO_ACCESS | COMMENT_ACCESS )',
+  })
+  role: VALID_ROLES;
 }

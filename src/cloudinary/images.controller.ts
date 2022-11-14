@@ -6,7 +6,6 @@ import {
   Post,
   UploadedFile,
   UseGuards,
-  // UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -14,15 +13,12 @@ import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { fileMimetypeFilter } from './file-mimetypes.filter';
 import { ImagesService } from './images.service';
 import { UploadImageDto } from './dtos/upload-image.dto';
-// import { User } from 'src/users/entity/users.entity';
-// import { AuthGuard } from 'src/Guards/auth.guard';
 import { AuthUser } from 'src/decorators/auth.decorator';
 import { AuthGuard } from '@nestjs/passport';
 import { RoleProtected } from './decorators/role-protected.decorator';
 import { VALID_ROLES } from 'src/users/interfaces/role.interface';
 import { UserRoleGuard } from 'src/Guards/user-role.guard';
-// import { AuthUser } from 'src/decorators/auth.decorator';
-// import { JwtStrategy } from 'src/users/strategy/jwt.strategy';
+import { User } from 'src/users/entity/users.entity';
 
 @Controller('images')
 @ApiBearerAuth()
@@ -31,10 +27,13 @@ export class ImagesController {
   constructor(private imagesService: ImagesService) {}
 
   @Post()
-  @RoleProtected(VALID_ROLES.FULL_ACCESS)
+  @RoleProtected(VALID_ROLES.FULL_ACCESS, VALID_ROLES.COMMENT_ACCESS)
   @UseGuards(AuthGuard(), UserRoleGuard)
   @UseInterceptors(
-    FileInterceptor('file', { fileFilter: fileMimetypeFilter('image') }),
+    FileInterceptor('file', {
+      fileFilter: fileMimetypeFilter('image'),
+      limits: { files: 1 },
+    }),
   )
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -54,17 +53,20 @@ export class ImagesController {
   async uploadImage(
     @Body() body: UploadImageDto,
     @UploadedFile() image: Express.Multer.File,
-    @AuthUser('role') role: any,
+    @AuthUser('id') userId: User,
   ) {
-    console.log({ role });
-    // console.log('comment: ', body.comment);
-    // console.log('token: ', token);
-    // console.log('token: ', token);
-    // return this.imagesService.uploadImageToCloudinary(image);x`
+    return this.imagesService.uploadImageToCloudinary(
+      image,
+      userId,
+      body.comment,
+    );
   }
 
-  // @Get('/:userId')
-  // getAllImages(@Param('userId') id: string) {
-  //   return this.imagesService.findAll(userId);
-  // }
+  @Get()
+  @UseGuards(AuthGuard(), UserRoleGuard)
+  getAllImages(@AuthUser('id') userId: User) {
+    console.log('user: ', userId);
+
+    return this.imagesService.getAllImages(userId);
+  }
 }

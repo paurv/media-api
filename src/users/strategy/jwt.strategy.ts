@@ -6,7 +6,6 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Repository } from 'typeorm';
 import { User } from '../entity/users.entity';
 import { JwtPayload } from '../interfaces/jwt-payload.interface';
-import { AuthService } from '../services/auth.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -23,14 +22,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: JwtPayload): Promise<User> {
-    console.log('payload: ', payload);
-
-    const { id, role } = payload;
-
+    // const { id, role } = payload;
+    const { id } = payload;
     const user = await this.userRepository.findOneBy({ id });
-
     if (!user) throw new UnauthorizedException('Token not valid');
-
     return user;
   }
 

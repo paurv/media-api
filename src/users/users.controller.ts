@@ -1,11 +1,4 @@
-import {
-  Body,
-  Controller,
-  Post,
-  Patch,
-  Param,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Post, Patch, Param } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { LoginDto } from './dtos/login.dto';
 import { Serialize } from 'src/interceptors/serialize.interceptors';

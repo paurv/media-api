@@ -46,8 +46,6 @@ export class AuthService {
       select: { email: true, password: true, id: true, role: true },
     });
 
-    console.log(user);
-
     if (!user) throw new UnauthorizedException('Credentials are not valid');
 
     const [salt, storedHash] = user.password.split('.');
@@ -55,8 +53,6 @@ export class AuthService {
     if (storedHash !== hash.toString('hex')) {
       throw new BadRequestException('Credentials are not valid');
     }
-
-    console.log('user role: ', user.role);
 
     return {
       ...user,
