@@ -1,9 +1,9 @@
 import { Body, Controller, Post, Patch, Param } from '@nestjs/common';
-import { CreateUserDto } from './dtos/create-user.dto';
-import { LoginDto } from './dtos/login.dto';
+import { CreateUserDto } from '../dtos/create-user.dto';
+import { LoginDto } from 'src/dtos/login.dto';
 import { Serialize } from 'src/interceptors/serialize.interceptors';
-import { UserDto } from './dtos/user.dto';
-import { UpdaateUserDto } from './dtos/update-user.dto';
+import { UserDto } from 'src/dtos/user.dto';
+import { UpdaateUserDto } from 'src/dtos/update-user.dto';
 import { UsersService } from './services/users.service';
 import { AuthService } from './services/auth.service';
 import { ApiTags } from '@nestjs/swagger';

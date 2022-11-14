@@ -1,5 +1,5 @@
 import { Expose } from 'class-transformer';
-import { Role } from '../interfaces/role.interface';
+import { Role } from 'src/users/interfaces/role.interface';
 
 export class UserDto {
   @Expose()

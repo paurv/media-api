@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { CloudinaryProvider } from './cloudinary';
-import { CloudinaryService } from './cloudinary.service';
-import { ImagesService } from './images.service';
+import { CloudinaryProvider } from './constants/cloudinary';
+import { CloudinaryService } from './services/cloudinary.service';
+import { ImagesService } from './services/images.service';
 import { ImagesController } from './images.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Image } from './entity/image.entity';

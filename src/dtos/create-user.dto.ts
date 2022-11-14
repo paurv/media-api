@@ -9,7 +9,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { VALID_ROLES } from '../interfaces/role.interface';
+import { VALID_ROLES } from '../users/interfaces/role.interface';
 
 export class CreateUserDto {
   @ApiProperty({ type: String, description: 'User email' })

@@ -2,9 +2,10 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CloudinaryService } from './cloudinary.service';
-import { Image } from './entity/image.entity';
+import { Image } from '../entity/image.entity';
 import { UploadApiResponse, UploadApiErrorResponse } from 'cloudinary';
 import { User } from 'src/users/entity/users.entity';
+import { PaginationDto } from 'src/dtos/pagination.dto';
 
 @Injectable()
 export class ImagesService {
@@ -42,7 +43,20 @@ export class ImagesService {
     return this.repo.save(data);
   }
 
-  getAllImages(userId: User) {
-    return this.repo.find({ where: { user: userId } });
+  async getAllImages(userId: string, paginationDto: PaginationDto) {
+    const { limit = 10, from = 0 } = paginationDto;
+
+    const filter = { id: userId } as Partial<User>;
+
+    const images = await this.repo.find({
+      where: { user: filter },
+      order: {
+        createdAt: 'ASC',
+      },
+      take: limit,
+      skip: from,
+    });
+
+    return images;
   }
 }

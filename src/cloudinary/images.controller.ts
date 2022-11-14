@@ -2,23 +2,24 @@ import {
   Body,
   Controller,
   Get,
-  Param,
   Post,
+  Query,
   UploadedFile,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
-import { fileMimetypeFilter } from './file-mimetypes.filter';
-import { ImagesService } from './images.service';
-import { UploadImageDto } from './dtos/upload-image.dto';
+import { fileMimetypeFilter } from './filters/file-mimetypes.filter';
+import { ImagesService } from './services/images.service';
+import { UploadImageDto } from '../dtos/upload-image.dto';
 import { AuthUser } from 'src/decorators/auth.decorator';
 import { AuthGuard } from '@nestjs/passport';
 import { RoleProtected } from './decorators/role-protected.decorator';
 import { VALID_ROLES } from 'src/users/interfaces/role.interface';
 import { UserRoleGuard } from 'src/Guards/user-role.guard';
 import { User } from 'src/users/entity/users.entity';
+import { PaginationDto } from 'src/dtos/pagination.dto';
 
 @Controller('images')
 @ApiBearerAuth()
@@ -64,9 +65,11 @@ export class ImagesController {
 
   @Get()
   @UseGuards(AuthGuard(), UserRoleGuard)
-  getAllImages(@AuthUser('id') userId: User) {
-    console.log('user: ', userId);
-
-    return this.imagesService.getAllImages(userId);
+  getAllImages(
+    @AuthUser('id') userId: string,
+    @Query() paginationDto: PaginationDto,
+  ) {
+    console.log('paginationDto: ', paginationDto);
+    return this.imagesService.getAllImages(userId, paginationDto);
   }
 }

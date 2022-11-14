@@ -8,8 +8,8 @@ import { Repository } from 'typeorm';
 import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
 import { InjectRepository } from '@nestjs/typeorm';
-import { LoginDto } from '../dtos/login.dto';
-import { CreateUserDto } from '../dtos/create-user.dto';
+import { LoginDto } from 'src/dtos/login.dto';
+import { CreateUserDto } from '../../dtos/create-user.dto';
 import { User } from '../entity/users.entity';
 import { JwtPayload } from '../interfaces/jwt-payload.interface';
 
