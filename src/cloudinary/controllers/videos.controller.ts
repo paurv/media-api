@@ -2,10 +2,11 @@ import {
   Controller,
   Post,
   UploadedFile,
+  UploadedFiles,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 // import { fileMimetypeFilter } from '../filters/file-mimetypes.filter';
 import { AuthUser } from 'src/decorators/auth.decorator';
@@ -37,11 +38,8 @@ export class VideosController {
       type: 'object',
       properties: {
         file: {
-          type: 'string',
+          type: 'file',
           format: 'binary',
-        },
-        comment: {
-          type: 'string',
         },
       },
     },
@@ -51,5 +49,23 @@ export class VideosController {
     @AuthUser('id') userId: User,
   ) {
     return this.videoService.uploadVideoToCloudinary(video, userId);
+  }
+
+  @Post('/upload')
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'file',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @UseInterceptors(FilesInterceptor('files'))
+  uploadMultipleFiles(@UploadedFiles() files: any) {
+    console.log(files);
   }
 }
